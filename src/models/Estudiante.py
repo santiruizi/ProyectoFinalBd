@@ -8,16 +8,15 @@
 import Usuario
 
 class Estudiante(Usuario):
-
-    def  __init__(self, id_usuario,nombre1, apellido1, correoInstitucional,  id_estudiante, codigo, plan, semestre,nombre2 = None, apellido2 = None):
-        super().__init__(id_usuario,nombre1, apellido1, correoInstitucional, nombre2 = None, apellido2 = None)
+    def __init__(self, id_usuario, nombre1, apellido1, correoInstitucional, id_estudiante, codigo, plan, semestre, nombre2=None, apellido2=None):
+        super().__init__(id_usuario, nombre1, apellido1, correoInstitucional, nombre2=nombre2, apellido2=apellido2)
+        
         self.id_estudiante = id_estudiante
         self.codigo = codigo
         self.plan = plan
         self.semestre = semestre
 
-    # ID de estudiante
-
+    # ID Estudiante
     def getIdEstudiante(self):
         return self.id_estudiante
 
@@ -25,7 +24,6 @@ class Estudiante(Usuario):
         self.id_estudiante = id_estudiante
 
     # Codigo
-     
     def getCodigo(self):
         return self.codigo
 
@@ -33,7 +31,6 @@ class Estudiante(Usuario):
         self.codigo = codigo
 
     # Plan
-     
     def getPlan(self):
         return self.plan
 
@@ -41,9 +38,8 @@ class Estudiante(Usuario):
         self.plan = plan
 
     # Semestre
-     
     def getSemestre(self):
         return self.semestre
 
     def setSemestre(self, semestre):
-        self.semestre = semestre 
+        self.semestre = semestre

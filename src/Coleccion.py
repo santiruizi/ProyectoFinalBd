@@ -12,7 +12,7 @@ class Coleccion:
         self.id_coleccion = id_coleccion
         self.nombre = nombre
         self.dias_prestamo = dias_prestamo
-        max_renovaciones = max_renovaciones
+        self.max_renovaciones = max_renovaciones
 
     # Id Coleccion
 
