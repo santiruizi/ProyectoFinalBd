@@ -1,5 +1,4 @@
 """
-
 - Santiago Ruiz Gallego.
 - Juan Camilo Garcia Durango.
 - Isaac Antillano Cruiz.
@@ -11,13 +10,13 @@ class Usuario:
 
     # Ingreso de creacion de dato.
         
-    def __init__(self, id_usuario,nombre1, apellido1, correoInstitucional, nombre2 = None, apellido2 = None):
+    def __init__(self, id_usuario,nombre1, apellido1, correo_institucional, nombre2 = None, apellido2 = None):
         self.id_usuario = id_usuario
         self.nombre1 = nombre1
         self.nombre2 = nombre2
         self.apellido1 = apellido1
         self.apellido2 = apellido2
-        self.correoInstitucional = correoInstitucional
+        self.correo_institucional = correo_institucional
 
     # Nombre 1
 
@@ -38,7 +37,7 @@ class Usuario:
     # Correo Institucional
 
     def getCorreoInstitucional(self):
-        return self.correoInstitucional
+        return self.correo_institucional
     
-    def setCorreoInstitucional(self, correoInstitucional):
-        self.correoInstitucional = correoInstitucional
+    def setCorreoInstitucional(self, correo_institucional):
+        self.correo_institucional = correo_institucional
