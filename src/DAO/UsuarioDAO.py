@@ -99,7 +99,7 @@ class UsuarioDAO:
             connection.commit()
             return True
         except Exception as e:
-            print(f"Error deleting usuario: {e}")
+            print(f"Error deleting usuario: {repr(e)}")
             if connection:
                 connection.rollback()
             return False
