@@ -1,5 +1,5 @@
-from DAO.Connection import Connection
-from Usuario import Usuario
+from src.DAO.Connection import Connection
+from src.Usuario import Usuario
 
 class UsuarioDAO:
     @classmethod
@@ -56,6 +56,8 @@ class UsuarioDAO:
             connection.commit()
             return True
         except Exception as e:
+            with open("dao_error_log.txt", "w", encoding="utf-8") as f:
+                f.write(f"DAO INSERT ERROR: {repr(e)}")
             print(f"Error inserting usuario: {repr(e)}")
             if connection:
                 connection.rollback()

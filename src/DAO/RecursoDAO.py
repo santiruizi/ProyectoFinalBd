@@ -1,5 +1,5 @@
-from DAO.Connection import Connection
-from models.Recurso import Recurso
+from src.DAO.Connection import Connection
+from src.models.Recurso import Recurso
 
 class RecursoDAO:
     @classmethod

@@ -4,17 +4,14 @@
 -   Isaac Antillano Cruiz.
 -   Andres David Gaitan.
 -   Lourdes Gabriela Gomez.
-"""
+""" 
 
 import sys
 import os
 
 # Add project root to sys.path
-# Add src to path explicitly - ensure it's at the front
-project_root = os.getcwd()
-src_path = os.path.join(project_root, 'src')
-sys.path.insert(0, src_path)
-sys.path.insert(0, project_root) # Also add root if needed for direct naming
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, ROOT)
 
 from src.DAO.UsuarioDAO import UsuarioDAO
 from src.Usuario import Usuario
@@ -32,4 +29,6 @@ try:
         print("FAILURE: Could not insert user.")
 
 except Exception as e:
+    with open("error_log.txt", "w", encoding="utf-8") as f:
+        f.write(f"FULL ERROR: {repr(e)}")
     print(f"ERROR: {e}")

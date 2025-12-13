@@ -1,0 +1,1 @@
+DAO INSERT ERROR: UndefinedColumn('no existe la columna «nombre_1» en la relación «usuario»\nLINE 2:             INSERT INTO usuario (id_usuario, nombre_1, nombr...\n                                                     ^')

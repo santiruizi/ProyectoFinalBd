@@ -1,6 +1,6 @@
-from DAO.Connection import Connection
-from models.Libro import Libro
-from DAO.RecursoDAO import RecursoDAO
+from src.DAO.Connection import Connection
+from src.Libro import Libro
+from src.DAO.RecursoDAO import RecursoDAO
 
 class LibroDAO:
     @classmethod

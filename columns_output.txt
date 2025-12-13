@@ -1,0 +1,7 @@
+=== COLUMNAS DE LA TABLA 'usuario' ===
+- id_usuario
+- nombre1
+- nombre2
+- apellido1
+- apellido2
+- correo_institucional

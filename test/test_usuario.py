@@ -9,10 +9,14 @@ pg_bin = r"C:\Program Files\PostgreSQL\17\bin"
 if os.path.exists(pg_bin):
     os.environ['PATH'] = pg_bin + os.pathsep + os.environ['PATH']
 
-try:
-    from DAO.UsuarioDAO import UsuarioDAO
-    from Usuario import Usuario
+# Add src to path explicitly - ensure it's at the front
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, project_root)
 
+from src.DAO.UsuarioDAO import UsuarioDAO
+from src.Usuario import Usuario
+
+try:
     print("--- Testing UsuarioDAO ---")
     
     # 1. Insert Validation
