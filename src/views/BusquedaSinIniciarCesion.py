@@ -18,7 +18,8 @@ if os.path.exists(pg_bin):
 
 # Add project root to path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-sys.path.insert(0, project_root)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 from src.DAO.RecursoDAO import RecursoDAO
 
@@ -32,8 +33,30 @@ class BusquedaSinIniciarCesion:
         self.var_codigo = StringVar()
         self.var_nombre = StringVar()
         
+        # Inicializar el pool de conexiones antes de crear la interfaz
+        try:
+            from src.DAO.Connection import Connection
+            pool = Connection.get_pool()  # Inicializar el pool
+            if pool is None:
+                raise Exception("El pool de conexiones no se pudo crear")
+            print(f"Pool inicializado correctamente: {pool}")
+        except Exception as e:
+            error_msg = f"Error al inicializar el pool de conexiones: {e}"
+            print(error_msg)
+            import traceback
+            traceback.print_exc()
+            # Mostrar error en ventana emergente
+            from tkinter import messagebox
+            messagebox.showerror("Error de Conexión", 
+                                f"No se pudo inicializar el pool de conexiones.\n\n"
+                                f"Error: {str(e)}\n\n"
+                                f"Verifique que PostgreSQL esté ejecutándose.")
+            # No continuar si el pool no se puede inicializar
+            raise
+        
         self.crear_interfaz()
-        self.cargar_recursos()
+        # Cargar recursos después de que la interfaz esté completamente creada
+        self.ventana.after(100, self.cargar_recursos)  # Esperar 100ms para asegurar que el treeview esté listo
     
     def crear_interfaz(self):
         # ========== HEADER ==========
@@ -108,20 +131,45 @@ class BusquedaSinIniciarCesion:
             for item in self.tree.get_children():
                 self.tree.delete(item)
             
+            print("Cargando recursos desde la base de datos...")
             # Obtener recursos
             recursos = RecursoDAO.get_all()
+            print(f"Recursos obtenidos: {len(recursos)}")
             
             # Llenar tabla
-            for recurso in recursos:
+            if recursos:
+                for recurso in recursos:
+                    self.tree.insert("", "end", values=(
+                        recurso.getIdRecurso(),
+                        recurso.getNombre(),
+                        recurso.getEstado(),
+                        recurso.getIdColeccion()
+                    ))
+                print(f"[OK] {len(recursos)} recursos cargados en la tabla")
+            else:
+                # Si no hay recursos, mostrar mensaje
+                print("[ADVERTENCIA] No se encontraron recursos en la base de datos")
                 self.tree.insert("", "end", values=(
-                    recurso.getIdRecurso(),
-                    recurso.getNombre(),
-                    recurso.getEstado(),
-                    recurso.getIdColeccion()
+                    "Sin datos",
+                    "No hay recursos disponibles",
+                    "",
+                    ""
                 ))
         
         except Exception as e:
-            print(f"Error al cargar recursos: {e}")
+            error_msg = f"Error al cargar recursos: {e}"
+            print(error_msg)
+            import traceback
+            traceback.print_exc()
+            # Mostrar mensaje en la interfaz
+            from tkinter import messagebox
+            messagebox.showerror("Error de Conexión", 
+                                f"No se pudo conectar a la base de datos.\n\n"
+                                f"Error: {str(e)}\n\n"
+                                f"Verifique que:\n"
+                                f"- PostgreSQL esté ejecutándose\n"
+                                f"- Las credenciales sean correctas\n"
+                                f"- La base de datos 'postgres' exista")
     
     def buscar_recursos(self):
         """Busca recursos por código o nombre"""
@@ -158,7 +206,14 @@ class BusquedaSinIniciarCesion:
                 self.cargar_recursos()
         
         except Exception as e:
-            print(f"Error al buscar recursos: {e}")
+            error_msg = f"Error al buscar recursos: {e}"
+            print(error_msg)
+            import traceback
+            traceback.print_exc()
+            from tkinter import messagebox
+            messagebox.showerror("Error de Búsqueda", 
+                                f"No se pudo realizar la búsqueda.\n\n"
+                                f"Error: {str(e)}")
     
     def limpiar_filtros(self):
         """Limpia los campos de búsqueda"""
@@ -171,9 +226,15 @@ class BusquedaSinIniciarCesion:
         self.ventana.destroy()
         nueva_ventana = Tk()
         
-        from src.views.InterfazMain import InterfazMain
-        InterfazMain(nueva_ventana)
-        nueva_ventana.mainloop()
+        try:
+            from src.views.InterfazMain import InterfazMain
+            InterfazMain(nueva_ventana)
+            nueva_ventana.mainloop()
+        except ImportError as e:
+            print(f"Error al importar InterfazMain: {e}")
+            import traceback
+            traceback.print_exc()
+            nueva_ventana.destroy()
 
 if __name__ == "__main__":
     ventana = Tk()

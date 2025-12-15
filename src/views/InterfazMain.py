@@ -77,11 +77,22 @@ class InterfazMain:
         # Importar aquí para evitar dependencias circulares
         import sys
         import os
-        sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-        from src.views.InterfazLogin import InterfazLogin
         
-        InterfazLogin(nueva_ventana)
-        nueva_ventana.mainloop()
+        # Configurar path de manera más robusta
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, "../.."))
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
+        try:
+            from src.views.InterfazLogin import InterfazLogin
+            InterfazLogin(nueva_ventana)
+            nueva_ventana.mainloop()
+        except ImportError as e:
+            print(f"Error al importar InterfazLogin: {e}")
+            import traceback
+            traceback.print_exc()
+            nueva_ventana.destroy()
     
     def abrir_busqueda(self):
         """Abre la interfaz de búsqueda pública y cierra la ventana actual"""
@@ -91,11 +102,36 @@ class InterfazMain:
         # Importar aquí para evitar dependencias circulares
         import sys
         import os
-        sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-        from src.views.BusquedaSinIniciarCesion import BusquedaSinIniciarCesion
         
-        BusquedaSinIniciarCesion(nueva_ventana)
-        nueva_ventana.mainloop()
+        # Configurar path de manera más robusta
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, "../.."))
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
+        try:
+            from src.views.BusquedaSinIniciarCesion import BusquedaSinIniciarCesion
+            BusquedaSinIniciarCesion(nueva_ventana)
+            nueva_ventana.mainloop()
+        except (ImportError, ModuleNotFoundError) as e:
+            error_msg = str(e)
+            print(f"Error al importar BusquedaSinIniciarCesion: {error_msg}")
+            import traceback
+            traceback.print_exc()
+            
+            # Mostrar mensaje de error al usuario
+            from tkinter import messagebox
+            if "psycopg_pool" in error_msg or "psycopg-pool" in error_msg:
+                messagebox.showerror("Error de Dependencias", 
+                                    f"El módulo psycopg-pool no está instalado.\n\n"
+                                    f"Por favor, ejecute en la terminal:\n"
+                                    f"pip install psycopg-pool\n\n"
+                                    f"Error: {error_msg}")
+            else:
+                messagebox.showerror("Error de Importación", 
+                                    f"No se pudo importar el módulo requerido.\n\n"
+                                    f"Error: {error_msg}")
+            nueva_ventana.destroy()
 
 if __name__ == "__main__":
     ventana = Tk()

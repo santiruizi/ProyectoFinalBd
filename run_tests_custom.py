@@ -1,3 +1,12 @@
+"""
+-   Santiago Ruiz Gallego
+-   Juan Camilo Garcia Durango.
+-   Isaac Antillano Cruiz.
+-   Andres David Gaitan.
+-   Lourdes Gabriela Gomez.
+"""
+
+
 import unittest
 import sys
 import os
